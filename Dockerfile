@@ -1,4 +1,6 @@
+FROM cloudflare/cloudflared:latest AS cloudflared-bin
 FROM debian:latest
+COPY --from=cloudflared-bin /usr/local/bin/cloudflared /usr/local/bin/cloudflared
 WORKDIR /render
 
 ARG TAILSCALE_VERSION
@@ -9,7 +11,7 @@ RUN apt-get -qq update \
     apt-transport-https \
     ca-certificates \
     netcat-openbsd \
-    wget \
+    wget socat \
     dnsutils \
   > /dev/null \
   && apt-get -qq clean \
